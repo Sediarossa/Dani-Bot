@@ -1,6 +1,5 @@
-const { token, prefix} = require("./config/main.json");
-
-const Logger = require("./src/util/Logger");
+const { token, prefix} = require("./config.json");
+const Logger = require("./Logger");
 const fs = require("fs");
 
 const Discord = require("discord.js");
@@ -34,7 +33,7 @@ const eventFiles = fs.readdirSync('./src/listeners').filter(file => file.endsWit
 Logger.Info("[LISTENER] Caricando gli event listener...");
 
 for (const file of eventFiles) {
-	const event = require(`./src/listeners/${file}`);
+	const event = require(`./listeners/${file}`);
     Logger.Success("[LISTENER] Event listener caricato: "+file);
 	if (event.once) {
 		client.once(event.name, (...args) => event.run(...args));
@@ -43,5 +42,16 @@ for (const file of eventFiles) {
 	}
 }
 
+const handlers = fs.readdirSync('./src/handlers').filter(file => file.endsWith('.js'));
+for (const file of handlers) {
+	const handler = require(`./handlers/${file}`);
+    Logger.Info("[HANDLER] Caricando l'handler: "+file);
+	handler.run();
+}
+
 Logger.Info("Dando il Milk a Dani Bot...");
 client.login(token);
+
+module.exports = {
+    client: client,
+}
