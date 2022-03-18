@@ -3,7 +3,7 @@ const fs = require("fs");
 const Logger = require("../Logger");
 const { client } = require("../index");
 
-function handleCommands() {
+function run() {
     console.log("[HANDLERS] Caricando i comandi...");
 
     const commandFiles = fs.readdirSync(`./src/commands`).filter(file => file.endsWith(".js"));
@@ -22,5 +22,5 @@ function handleCommands() {
 }
 
 module.exports = {
-    handleCommands: handleCommands
+    run: run
 }
